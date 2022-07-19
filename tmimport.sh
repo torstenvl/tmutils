@@ -55,7 +55,9 @@ if [[ $? -eq 0 ]]; then
     MOUNTPOINT=`diskutil info ${1} | grep "Mount Point:" | sed 's/^ *Mount Point: *\(.*\)$/\1/'`
     if [ "${MOUNTPOINT}" == "" ]; then
         dispusage "No mount point for specified device ${1}. Perhaps it isn't mounted?" && exit
-        # TODO: Should check to see if it CONTAINS any disks with a Time Machine role...
+        ######################################################################################
+        ##  TODO: Should check to see if it CONTAINS any disks with a Time Machine role...  ##
+        ######################################################################################
     fi
 
     if [ ! -d "${MOUNTPOINT}/Backups.backupdb/" ]; then
