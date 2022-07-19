@@ -125,10 +125,10 @@ Computer Model:    %s\n\
 Host UUID:         %s\n\
 MAC Address:       %s\n\n" "${SPECIFIED}" "${BACKUPPATH}" "${MODEL}" "${UUID}" "${MAC}"
 
-printf "Attributes are now:\n"
-printf "    %s\t\t\t%s\n" "com.apple.backupd.ModelID" "$(xattr -p 'com.apple.backupd.ModelID' "${BACKUPPATH}")"
-printf "    %s\t%s\n" "com.apple.backupd.BackupMachineAddress" "$(xattr -p 'com.apple.backupd.BackupMachineAddress' "${BACKUPPATH}")"
-printf "    %s\t\t\t%s\n\n" "com.apple.backupd.HostUUID" "$(xattr -p 'com.apple.backupd.HostUUID' "${BACKUPPATH}")"
+printf "This backup drive is currently matched to the following computer:\n"
+printf "    ModelID:     %s\n"   "$(xattr -p 'com.apple.backupd.ModelID' "${BACKUPPATH}")"
+printf "    MAC Address: %s\n"   "$(xattr -p 'com.apple.backupd.BackupMachineAddress' "${BACKUPPATH}")"
+printf "    Host UUID:   %s\n\n" "$(xattr -p 'com.apple.backupd.HostUUID' "${BACKUPPATH}")"
 
 printf "\
 Preparing to run the following commands:\n\
@@ -150,10 +150,10 @@ select response in "Apply Time Machine Magic" "ABORT ABORT ABORT!"; do
         "${SIMONSAYS}" xattr -w 'com.apple.backupd.HostUUID'             "${UUID}"  "${BACKUPPATH}"
         "${SIMONSAYS}" tmutil inheritbackup "${BACKUPPATH}"
         printf "\nOperation completed.\n\n"
-        printf "Attributes are now:\n"
-        printf "    %s\t\t\t%s\n" "com.apple.backupd.ModelID" "$(xattr -p 'com.apple.backupd.ModelID' "${BACKUPPATH}")"
-        printf "    %s\t%s\n" "com.apple.backupd.BackupMachineAddress" "$(xattr -p 'com.apple.backupd.BackupMachineAddress' "${BACKUPPATH}")"
-        printf "    %s\t\t\t%s\n\n" "com.apple.backupd.HostUUID" "$(xattr -p 'com.apple.backupd.HostUUID' "${BACKUPPATH}")"
+        printf "This backup drive has been matched to the current computer:\n"
+        printf "    ModelID:     %s\n"   "$(xattr -p 'com.apple.backupd.ModelID' "${BACKUPPATH}")"
+        printf "    MAC Address: %s\n"   "$(xattr -p 'com.apple.backupd.BackupMachineAddress' "${BACKUPPATH}")"
+        printf "    Host UUID:   %s\n\n" "$(xattr -p 'com.apple.backupd.HostUUID' "${BACKUPPATH}")"
         break
     else
         printf "\nOperation aborted. No action has been taken.\n\n"
