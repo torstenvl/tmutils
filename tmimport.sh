@@ -78,7 +78,7 @@ if [[ $? -eq 0 ]]; then
 
 ## OTHERWISE, THE USER MAY HAVE PROVIDED A BACKUPS.BACKUPDB PATH
 elif [[ -d "${1}" ]] && [[ $(stat -f %R ${1}) =~ Backups.backupdb$ ]]; then
-    BACKUPPATH=`find $(stat -f %R ${1}) -type d -maxdepth 1 -xattrname com.apple.backupd.HostUUID -print -quit`
+    BACKUPPATH=`find $(stat -f %R ${1}) -type d -mindepth 1 -maxdepth 1 -xattrname com.apple.backupd.HostUUID -print -quit`
     if [ "${BACKUPPATH}" == "" ]; then
         dispusage "No suitable backups within $(stat -f %R ${1})!" && exit
     fi
@@ -103,8 +103,8 @@ fi
 ############################################################################
 MODEL=`ioreg -d2 -k IOPlatformUUID | awk -F\" '/"model"/{print $(NF-1)}'`
 UUID=`ioreg -d2 -k IOPlatformUUID | awk -F\" '/"IOPlatformUUID"/{print $(NF-1)}'`
-#UUIDHEX=`printf '%s\0' ${UUID} | xxd -p -c37`
 MAC=`ifconfig en0 | awk '/ether/{print $2}'`
+#UUIDHEX=`printf '%s\0' ${UUID} | xxd -p -c37`
 #MACHEX=`printf '%s\0' ${MAC} | xxd -p`
 
 KERNELVER=`uname -a | sed 's/.*Version \([0-9][0-9]*\).*/\1/g'`
@@ -141,7 +141,23 @@ Preparing to run the following commands:\n\
         "${SIMONSAYS}"  "${UUID}"   "${BACKUPPATH}" \
         "${SIMONSAYS}"  "${BACKUPPATH}"
 
-printf "\nDoes everything look right?\n\n"
+if [ ! "$(basename "${BACKUPPATH}")" -eq "$(scutil --get ComputerName)"]; then
+    printf "#############################################################################\n"
+    printf "##            W A R N I N G     W A R N I N G     W A R N I N G            ##\n"
+    printf "#############################################################################\n"
+    printf "\n"
+    printf "The Backup Location DOES NOT MATCH your computer name.\n"
+    printf "\n"
+    printf "    Backup Location:        %s\n" "${BACKUPPATH}"
+    printf "    Backup Computer Name:   %s\n" "$(basename "${BACKUPPATH}")"
+    printf "    Current Computer Name:  %s\n" "$(scutil --get ComputerName)"
+    printf "\n"
+    printf "Only proceed if you are very certain of what you're doing!\n"
+    printf "Even if successful, the Time Machine restore UI will be adversely affected.\n"
+else
+    printf "Does everything look right?\n\n"
+fi    
+
 
 select response in "Apply Time Machine Magic" "ABORT ABORT ABORT!"; do
     if [ "${response}" == "Apply Time Machine Magic" ]; then
@@ -149,11 +165,15 @@ select response in "Apply Time Machine Magic" "ABORT ABORT ABORT!"; do
         "${SIMONSAYS}" xattr -w 'com.apple.backupd.BackupMachineAddress' "${MAC}"   "${BACKUPPATH}"
         "${SIMONSAYS}" xattr -w 'com.apple.backupd.HostUUID'             "${UUID}"  "${BACKUPPATH}"
         "${SIMONSAYS}" tmutil inheritbackup "${BACKUPPATH}"
-        printf "\nOperation completed.\n\n"
-        printf "This backup drive has been matched to the current computer:\n"
-        printf "    ModelID:     %s\n"   "$(xattr -p 'com.apple.backupd.ModelID' "${BACKUPPATH}")"
-        printf "    MAC Address: %s\n"   "$(xattr -p 'com.apple.backupd.BackupMachineAddress' "${BACKUPPATH}")"
-        printf "    Host UUID:   %s\n\n" "$(xattr -p 'com.apple.backupd.HostUUID' "${BACKUPPATH}")"
+        if [ ! $? -eq 0 ]; then
+            printf "\nOperation failed. Backup history not imported.\n\n"
+        else
+            printf "\nOperation completed.\n\n"
+            printf "This backup drive has been matched to the following computer:\n"
+            printf "    ModelID:     %s\n"   "$(xattr -p 'com.apple.backupd.ModelID' "${BACKUPPATH}")"
+            printf "    MAC Address: %s\n"   "$(xattr -p 'com.apple.backupd.BackupMachineAddress' "${BACKUPPATH}")"
+            printf "    Host UUID:   %s\n\n" "$(xattr -p 'com.apple.backupd.HostUUID' "${BACKUPPATH}")"
+        fi
         break
     else
         printf "\nOperation aborted. No action has been taken.\n\n"
