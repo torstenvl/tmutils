@@ -21,18 +21,26 @@
 ############################################################################
 printusage() {
     echo "
-DIRECTORY DE-DUPLICATION (\"Dirty Dupe\")
+DIRECTORY DE-DUPLICATOR
 
-${0} [--execute] masterdir shadowdir
+USAGE
 
-For each file in shadowdir, replace it with a hard link to the matching file
-(if any) in masterdir.  A file will be considered a match if, and only if, it
-shares the same file name, relative path, and contents.
+    dirdedupe.sh [--execute] masterdir shadowdir
+
+DESCRIPTION
+
+    For each file in shadowdir, replace it with a hard link to the matching file
+    (if any) in masterdir.  A file will be considered a match if, and only if,
+    it shares the same file name, relative path, and contents.
 
 OPTIONS
 
-    --execute  Actually remove and link duplicate files. By default, this
+    --execute  Actually remove and link duplicate files. By default, this 
                program runs in test mode. 
+
+MISC
+
+    The name of this utility is pronounced "dirty dupe."
 "
 }
 

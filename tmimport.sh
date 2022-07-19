@@ -21,22 +21,28 @@ function dispusage() {
     printf "%s\n\n" "${1}"
   fi
   echo "\
-Time Machine Importer"
-  echo
-  echo "\
-Usage: ${0} <backup drive>
+TIME MACHINE IMPORT
 
-Time Machine Importer modifies the metadata of a backup drive to match the 
-current computer's model and unique identifiers (primary MAC address and
-hardware platform UUID/provisioning UDID), attempts to associate the primary
-disk with the backup, and attempts to 'inherit' the backup history.
+USAGE
 
-The backup drive should be specified by volume name or mount point. If the
-backup drive is specified by the disk device name or path, Time Machine
-Importer will try to find an HFS+ partition on it. If there is one, or if a
-partition name or path is specified, Time Machine Importer will attempt to
-find the mount point and check for the existence of a Backups.backupdb
-folder. 
+    ${0} <backup drive>
+
+DESCRIPTION
+
+    Time Machine Importer modifies the metadata of a backup drive to match the 
+    current computer's model and unique identifiers (primary MAC address and
+    hardware platform UUID/provisioning UDID) and attempts to 'inherit' the
+    backup history.
+
+    The backup drive should be specified by disk or volume name (or path) or
+    the mount point of the backup drive. If Time Machine Importer cannot find
+    an appropriate disk volume or mount point, it will check to see if the 
+    specified directory is a valid Backups.backupdb location (or a machine
+    directory under one).
+
+    A future version may attempt to detect HFS+ or APFS partitions serving as
+    backup drives, and, if a backup drive is specified as a device path, it
+    will automagically choose the correct backup path.
 
 "
 }
