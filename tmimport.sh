@@ -141,7 +141,7 @@ Preparing to run the following commands:\n\
         "${SIMONSAYS}"  "${UUID}"   "${BACKUPPATH}" \
         "${SIMONSAYS}"  "${BACKUPPATH}"
 
-if [ ! "$(basename "${BACKUPPATH}")" -eq "$(scutil --get ComputerName)"]; then
+if [ ! "$(basename "${BACKUPPATH}")" == "$(scutil --get ComputerName)" ]; then
     printf "#############################################################################\n"
     printf "##            W A R N I N G     W A R N I N G     W A R N I N G            ##\n"
     printf "#############################################################################\n"
@@ -155,7 +155,7 @@ if [ ! "$(basename "${BACKUPPATH}")" -eq "$(scutil --get ComputerName)"]; then
     printf "Only proceed if you are very certain of what you're doing!\n"
     printf "Even if successful, the Time Machine restore UI will be adversely affected.\n"
 else
-    printf "Does everything look right?\n\n"
+    printf "Does everything look right?\n"
 fi    
 
 

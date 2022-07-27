@@ -59,6 +59,26 @@ ______________________________________________________________________________
 ______________________________________________________________________________
 
 
+**tmbless**
+------------
+    TIME MACHINE BLESS
+    
+    USAGE
+    
+        tmbless.sh <snapshot directory>
+    
+    DESCRIPTION
+    
+        Time Machine Blessing modifies the metadata of a snapshot directory
+        (i.e., a datestamped directory inside a Backups.backupdb/machinename/
+        directory) so that the metadata reflects a backup completed on that date
+        and the metadata of the top-level drive matches that of the current drive.
+    
+        These modifications should allow restoration of files within the Time
+        Machine restore UI. 
+______________________________________________________________________________
+
+
 **dirdedupe**
 -------------
     DIRECTORY DE-DUPLICATOR
