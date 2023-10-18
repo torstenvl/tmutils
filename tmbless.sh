@@ -1,11 +1,6 @@
 #!/usr/bin/env bash
 
-# BITSC LICENSE NOTICE (MODIFIED ISC LICENSE)
-#
-# TIME MACHINE BLESS
-#
-# Copyright (c) 2022 Lee Ockert <torstenvl@gmail.com>
-#                    https://github.com/torstenvl
+# Copyright (c) 2023 Joshua Lee Ockert <torstenvl@gmail.com>
 #
 # THIS WORK IS PROVIDED "AS IS" WITH NO WARRANTY OF ANY KIND. THE IMPLIED
 # WARRANTIES OF MERCHANTABILITY, FITNESS, NON-INFRINGEMENT, AND TITLE ARE
@@ -29,10 +24,13 @@ USAGE
 
 DESCRIPTION
 
-    Time Machine Blessing modifies the metadata of a snapshot directory
-    (i.e., a datestamped directory inside a Backups.backupdb/machinename/
-    directory) so that the metadata reflects a backup completed on that date
-    and the metadata of the top-level drive matches that of the current drive.
+    Time Machine Bless marks a snapshot directory as valid and recognizable
+    by Time Machine.
+
+    It does this by modifying the metadata of the snapshot directory so that
+    the it accurately reflects the date the snapshot was created and the
+    metadata of the 'drive' subdirectory within that snapshot directory
+    matches the current drive.
 
     These modifications should allow restoration of files within the Time
     Machine restore UI. 
