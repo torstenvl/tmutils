@@ -78,16 +78,24 @@ do
     if [ -f "${shadowfile}" ]; then
       masterfile="${shadowfile/#${shadowdir}/${masterdir}}"
       if [ -f "${masterfile}" ]; then
-        cmp -s "${masterfile}" "${shadowfile}"
-        if [ $? -eq 0 ]; then
-          if [ $REALLYRUN -gt 0 ]; then
-            echo "Linking \"${masterfile}\" <-- \"${shadowfile}\""
-            ln -Pf "${masterfile}" "${shadowfile}"
+        if [ "${shadowfile}" -ef "${masterfile}" ]; then
+          echo "ID   \"${masterfile}\" <-> \"${shadowfile}\""
+        else
+          cmp -s "${masterfile}" "${shadowfile}"
+          if [ $? -eq 0 ]; then
+            if [ $REALLYRUN -gt 0 ]; then
+              echo "LINK \"${masterfile}\" <-- \"${shadowfile}\""
+              ln -Pf "${masterfile}" "${shadowfile}"
+            else
+              echo "HYPO \"${masterfile}\" <~~ \"${shadowfile}\""
+            fi
           else
-            echo "NOT linking \"${masterfile}\" <-- \"${shadowfile}\""
-          fi
-        fi
-      fi
+            echo "MOD  \"${masterfile}\" <X> \"${shadowfile}\""
+          fi # end check for file equality
+        fi # end check for inode equality
+      else
+        echo "NEW  \"${shadowfile}\" "
+      fi # end check if master file exists
     fi
 done
 
