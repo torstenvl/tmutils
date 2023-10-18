@@ -1,11 +1,6 @@
 #!/usr/bin/env bash
 
-# BITSC LICENSE NOTICE (MODIFIED ISC LICENSE)
-#
-# TIME MACHINE IMPORTER
-#
-# Copyright (c) 2022 Lee Ockert <torstenvl@gmail.com>
-#                    https://github.com/torstenvl
+# Copyright (c) 2023 Joshua Lee Ockert <torstenvl@gmail.com>
 #
 # THIS WORK IS PROVIDED "AS IS" WITH NO WARRANTY OF ANY KIND. THE IMPLIED
 # WARRANTIES OF MERCHANTABILITY, FITNESS, NON-INFRINGEMENT, AND TITLE ARE
@@ -29,21 +24,20 @@ USAGE
 
 DESCRIPTION
 
-    Time Machine Importer modifies the metadata of a backup drive to match the 
-    current computer's model and unique identifiers (primary MAC address and
-    hardware platform UUID/provisioning UDID) and attempts to 'inherit' the
-    backup history.
+    Time Machine Importer attempts to inherit the backup history of a backup
+    drive. If the backup drive is not paired to the current computer, Time
+    Machine Importer will attempt to pair the drive with the current computer
+    by modifying the model, MAC address, and UUID/UDID reflected in the
+    metadata of the backup drive.
 
     The backup drive should be specified by disk or volume name (or path) or
-    the mount point of the backup drive. If Time Machine Importer cannot find
-    an appropriate disk volume or mount point, it will check to see if the 
-    specified directory is a valid Backups.backupdb location (or a machine
-    directory under one).
+    the mount point of the backup drive. For example:
+        - ${0} /dev/disk1s1
+        - ${0} /Volumes/TMBACKUP
 
-    A future version may attempt to detect HFS+ or APFS partitions serving as
-    backup drives, and, if a backup drive is specified as a device path, it
-    will automagically choose the correct backup path.
-
+    While some additional heuristics may assist in identifying a backup drive
+    that is specified in other ways, they are untested and not guaranteed
+    to work correctly.
 "
 }
 
@@ -61,9 +55,6 @@ if [[ $? -eq 0 ]]; then
     MOUNTPOINT=`diskutil info ${1} | grep "Mount Point:" | sed 's/^ *Mount Point: *\(.*\)$/\1/'`
     if [ "${MOUNTPOINT}" == "" ]; then
         dispusage "No mount point for specified device ${1}. Perhaps it isn't mounted?" && exit
-        ######################################################################################
-        ##  TODO: Should check to see if it CONTAINS any disks with a Time Machine role...  ##
-        ######################################################################################
     fi
 
     if [ ! -d "${MOUNTPOINT}/Backups.backupdb/" ]; then
@@ -159,8 +150,8 @@ else
 fi    
 
 
-select response in "Apply Time Machine Magic" "ABORT ABORT ABORT!"; do
-    if [ "${response}" == "Apply Time Machine Magic" ]; then
+select response in "Import Time Machine backup" "ABORT ABORT ABORT!"; do
+    if [ "${response}" == "Import Time Machine backup" ]; then
         "${SIMONSAYS}" xattr -w 'com.apple.backupd.ModelID'              "${MODEL}" "${BACKUPPATH}"
         "${SIMONSAYS}" xattr -w 'com.apple.backupd.BackupMachineAddress' "${MAC}"   "${BACKUPPATH}"
         "${SIMONSAYS}" xattr -w 'com.apple.backupd.HostUUID'             "${UUID}"  "${BACKUPPATH}"
