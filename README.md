@@ -101,3 +101,7 @@ ______________________________________________________________________________
 
         --execute  Actually remove and link duplicate files. By default, this 
                    program runs in test mode. 
+
+In the example below, you can see that running `dirdedupe.sh` results in the files being linked, while preserving the date and time stamps of the enclosing directories.
+
+<img width="761" alt="dirdedupe example" src="https://github.com/torstenvl/tmutils/assets/19603155/f5a9166a-2058-4eb7-ab30-0ac64b6bdfbd">
