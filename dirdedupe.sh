@@ -50,15 +50,15 @@ fi
 
 # MAKE SURE WE HAVE THE RIGHT NUMBER OF ARGUMENTS AND THEY'RE VALID
 if [ ! $# -eq 2 ]; then
-  echo && echo "Wrong number of arguments!" && printusage && exit
+    echo && echo "Wrong number of arguments!" && printusage && exit
 else
-  masterdir=$1
-  subjectdir=$2
-  if [ ! -d "${masterdir}" ]; then
-    echo && echo "${masterdir} is not a directory!" && printusage && exit
-  elif [ ! -d "${subjectdir}" ]; then
-    echo && echo "${subjectdir} is not a directory!" && printusage && exit
-  fi
+    masterdir=$1
+    subjectdir=$2
+    if [ ! -d "${masterdir}" ]; then
+        echo && echo "${masterdir} is not a directory!" && printusage && exit
+    elif [ ! -d "${subjectdir}" ]; then
+        echo && echo "${subjectdir} is not a directory!" && printusage && exit
+    fi
 fi
 
 ############################################################################
@@ -82,12 +82,12 @@ do
                         echo "LINK \"${masterfile}\" <-- \"${subjectfile}\""
                         # Store the mtime/atime of subject file's directory
                         TEMPSUBJDIR=`dirname "${subjectfile}"`
-                        #touch -r "${TEMPSUBJDIR}" "${TEMPFILE}"
+                        touch -r "${TEMPSUBJDIR}" "${TEMPFILE}"
                         # Link the subject file to the corresponding file in
                         # the master directory
                         ln -Pf "${masterfile}" "${subjectfile}"
                         # Restore the mtime/atime of subject file's directory
-                        #touch -r "${TEMPFILE}" "${TEMPSUBJDIR}"
+                        touch -r "${TEMPFILE}" "${TEMPSUBJDIR}"
                     else
                         echo "HYPO \"${masterfile}\" <~~ \"${subjectfile}\""
                         TEMPSUBJDIR=`dirname "${subjectfile}"`
