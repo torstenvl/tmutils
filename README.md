@@ -1,6 +1,11 @@
 **Time Machine Utilities**
 ==========================
 
+Time Machine Utilities consists of three shell scripts to assist in fixing some issues that may arise when trying to import and use older Time Machine backups, particularly those created on a previous Mac.
+
+- `tmimport.sh` imports a Time Machine backup collection, including making the metadata of the backup collection match the current computer.
+- `tmbless.sh` blesses an individual Time Machine backup, including making the metadata of the drive in the backup match the main drive of the current computer.
+- `dirdedupe.sh` is an advanced utility to manually deduplicate files using hard links, similar to how Time Machine works internally. This is sometimes helpful when a previous backup was not yet imported when creating a new Time Machine backup.
 
 **Installation**
 ----------------
