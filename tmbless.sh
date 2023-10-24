@@ -9,6 +9,8 @@
 #
 # Permission to use, copy, modify, and/or distribute this work for any
 # purpose is hereby granted, provided this notice appears in all copies.
+#
+# SPDX-License-Identifier: ISC
 
 
 function dispusage() {
