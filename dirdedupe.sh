@@ -92,8 +92,6 @@ do
                         touch -r "${TEMPFILE}" "${TEMPSUBJDIR}"
                     else
                         echo "HYPO \"${masterfile}\" <~~ \"${subjectfile}\""
-                        TEMPSUBJDIR=`dirname "${subjectfile}"`
-                        echo "   Saving atime/mtime of |${TEMPSUBJDIR}|"
                     fi
                 #else
                     #echo "MOD  \"${masterfile}\" <X> \"${subjectfile}\""
